@@ -29,7 +29,7 @@ namespace XTRuntime {
         public Dictionary<Type, MethodInfo> DictEnumeratorKVPairValueMethodMap = new Dictionary<Type, MethodInfo>();
 
 
-        private void CreateListMethodMap(Type type) {
+        public void CreateListMethodMap(Type type) {
             ContainerIndexMethodMap[type] = type.GetMethod("get_Item");
             ContainerNewIndexMethodMap[type] = type.GetMethod("set_Item");
             ContainerCountMethodMap[type] = type.GetMethod("get_Count");
@@ -40,7 +40,7 @@ namespace XTRuntime {
             ContainerContainsMethodMap[type] = type.GetMethod("Contains");
         }
 
-        private void CreateDictionaryMethodMap(Type type) {
+        public void CreateDictionaryMethodMap(Type type) {
             ContainerIndexMethodMap[type] = type.GetMethod("get_Item");
             ContainerNewIndexMethodMap[type] = type.GetMethod("set_Item");
             ContainerCountMethodMap[type] = type.GetMethod("get_Count");
@@ -58,14 +58,14 @@ namespace XTRuntime {
         }
 
 
-        private void CreateGenericMetamethods() {
+        public void CreateGenericMetamethods() {
             Lua.lua_pushcfunction(LuaStatePtr, LuaObjectFinalizer);
             Lua.lua_setfield(LuaStatePtr, -2, "__gc");
             Lua.lua_pushcfunction(LuaStatePtr, LuaObjectToString);
             Lua.lua_setfield(LuaStatePtr, -2, "__tostring");
         }
 
-        private void CreateListMetatable(Type type, string name) {
+        public void CreateListMetatable(Type type, string name) {
             MetatableMap[name] = type;
             ReverseMetatableMap[type] = name;
             Lua.luaL_newmetatable(LuaStatePtr, name);
@@ -76,7 +76,7 @@ namespace XTRuntime {
             Lua.lua_setfield(LuaStatePtr, -2, "__newindex");
         }
 
-        private void CreateDictionaryMetatable(Type type, string name) {
+        public void CreateDictionaryMetatable(Type type, string name) {
             MetatableMap[name] = type;
             ReverseMetatableMap[type] = name;
             Lua.luaL_newmetatable(LuaStatePtr, name);
@@ -87,7 +87,7 @@ namespace XTRuntime {
             Lua.lua_setfield(LuaStatePtr, -2, "__newindex");
         }
 
-        private void CreateNodeMetatable(Type type, string name) {
+        public void CreateNodeMetatable(Type type, string name) {
             MetatableMap[name] = type;
             ReverseMetatableMap[type] = name;
             Lua.luaL_newmetatable(LuaStatePtr, name);
@@ -106,7 +106,7 @@ namespace XTRuntime {
             Lua.lua_setfield(LuaStatePtr, -2, "__newindex");
         }
 
-        private string GetTypeMetatable(Type type) {
+        public string GetTypeMetatable(Type type) {
             if (!ReverseMetatableMap.TryGetValue(type, out string name)) {
                 throw new Exception($"Unsupported type: '{type}'");
             }
